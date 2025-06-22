@@ -1,12 +1,11 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
-from strategy import should_send_signal
+from strategy_dispatcher import dispatch_strategy
 from line_bot import send_line_message
 from signal_logger import log_signal
 
 app = FastAPI()
 
-# === 定義訊號資料格式 ===
 class SignalData(BaseModel):
     symbol: str
     side: str
@@ -16,13 +15,18 @@ class SignalData(BaseModel):
     takeprofit: float
     leverage: int
 
-# === 接收 Webhook 訊號 ===
 @app.post("/webhook")
 async def webhook(data: SignalData):
-    message, confidence = should_send_signal(data.dict())
+    signal_data = data.dict()
+    
+    # 策略分派 + 得分
+    message, confidence = dispatch_strategy(signal_data)
 
+    # 如果信心值高於門檻就發送
     if confidence >= 80:
         send_line_message(message)
 
-    log_signal(data.dict(), confidence)
+    # 紀錄訊號
+    log_signal(signal_data, confidence)
+
     return {"status": "received"}
