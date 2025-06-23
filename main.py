@@ -36,7 +36,7 @@ async def webhook(data: SignalData):
     # 發送通知（使用 LINE Messaging API）
     if confidence >= 80:
         status, resp_text = send_line_message(os.environ.get("LINE_USER_ID"), message)
-        print(f"LINE status: {status}, response: {resp_text}")  # 可以協助 debug
+        print(f"LINE status: {status}, response: {resp_text}")
 
     # 記錄訊號
     log_signal(signal_data, confidence)
