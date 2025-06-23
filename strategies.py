@@ -1,5 +1,3 @@
-# === strategies.py ===
-
 from typing import Tuple, Dict, Any
 
 # 策略基底類別
@@ -12,6 +10,8 @@ class BTCStrategy(BaseStrategy):
     def evaluate(self, data):
         price = data.get("price", 0)
         confidence = data.get("confidence", 0)
+        stoploss = data.get("stoploss", 0)
+        takeprofit = data.get("takeprofit", 0)
         rsi = data.get("rsi", 0)
         macd = data.get("macd", 0)
         kd = data.get("kd", 0)
@@ -23,7 +23,8 @@ class BTCStrategy(BaseStrategy):
         message += f"📊 信心指數：{confidence} 分\n"
         message += f"RSI：{rsi} 分\nMACD：{macd} 分\nKD：{kd} 分\n"
         message += f"Bollinger：{bollinger} 分\nMA：{ma} 分\nFibonacci：{fib} 分\n"
-        message += f"🎯 價格：{price}"
+        message += f"🎯 價格：{price}\n"
+        message += f"⛔ 止損：{stoploss}\n✅ 止盈：{takeprofit}"
 
         score_detail = {
             "rsi": rsi,
@@ -31,7 +32,9 @@ class BTCStrategy(BaseStrategy):
             "kd": kd,
             "bollinger": bollinger,
             "ma": ma,
-            "fib": fib
+            "fib": fib,
+            "stoploss": stoploss,
+            "takeprofit": takeprofit
         }
 
         return message, confidence, score_detail
@@ -41,6 +44,8 @@ class XAUStrategy(BaseStrategy):
     def evaluate(self, data):
         price = data.get("price", 0)
         confidence = data.get("confidence", 0)
+        stoploss = data.get("stoploss", 0)
+        takeprofit = data.get("takeprofit", 0)
         rsi = data.get("rsi", 0)
         macd = data.get("macd", 0)
         kd = data.get("kd", 0)
@@ -52,7 +57,8 @@ class XAUStrategy(BaseStrategy):
         message += f"📊 信心指數：{confidence} 分\n"
         message += f"RSI：{rsi} 分\nMACD：{macd} 分\nKD：{kd} 分\n"
         message += f"Bollinger：{bollinger} 分\nMA：{ma} 分\nFibonacci：{fib} 分\n"
-        message += f"🎯 價格：{price}"
+        message += f"🎯 價格：{price}\n"
+        message += f"⛔ 止損：{stoploss}\n✅ 止盈：{takeprofit}"
 
         score_detail = {
             "rsi": rsi,
@@ -60,7 +66,9 @@ class XAUStrategy(BaseStrategy):
             "kd": kd,
             "bollinger": bollinger,
             "ma": ma,
-            "fib": fib
+            "fib": fib,
+            "stoploss": stoploss,
+            "takeprofit": takeprofit
         }
 
         return message, confidence, score_detail
