@@ -63,7 +63,41 @@ class XAUStrategy(BaseStrategy):
 
 class BTCStrategy(BaseStrategy):
     def evaluate(self, data):
-        return "BTC 訊號尚未實作", 0, {}
+        price = data.get("price", 0)
+        confidence = data.get("confidence", 0)
+        stoploss = data.get("stoploss", 0)
+        takeprofit = data.get("takeprofit", 0)
+        rsi = data.get("rsi", 0)
+        macd = data.get("macd", 0)
+        kd = data.get("kd", 0)
+        bollinger = data.get("bollinger", 0)
+        ma = data.get("ma", 0)
+        fib = data.get("fib", 0)
+        leverage = data.get("leverage", 0)
+
+        rr_ratio = format_rr(takeprofit, stoploss)
+
+        message = f"\n🟠 BTCUSDT 比特幣訊號\n"
+        message += f"📊 信心指數：{confidence} 分（RR：{rr_ratio}）\n"
+        message += f"🔹 RSI：{rsi} 分\n🔹 MACD：{macd} 分\n🔹 KD：{kd} 分\n"
+        message += f"🔹 MA：{ma} 分\n🔹 Bollinger：{bollinger} 分\n🔹 Fibonacci：{fib} 分\n"
+        message += f"💰 現價：{price}\n🛡️ 止損：{stoploss}\n🎯 止盈：{takeprofit}\n⚖️ 槓桿建議：{leverage} 倍"
+
+        score_detail = {
+            "rsi": rsi,
+            "macd": macd,
+            "kd": kd,
+            "bollinger": bollinger,
+            "ma": ma,
+            "fib": fib,
+            "stoploss": stoploss,
+            "takeprofit": takeprofit,
+            "leverage": leverage,
+            "rr_ratio": rr_ratio
+        }
+
+        return message, confidence, score_detail
+
 
 STRATEGY_MAP = {
     "XAUUSD": XAUStrategy(),
