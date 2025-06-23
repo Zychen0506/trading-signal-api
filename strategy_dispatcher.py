@@ -1,9 +1,12 @@
 from btc_strategy import evaluate_btc_strategy
+from xau_strategy import evaluate_xau_strategy
 
 def dispatch_strategy(data):
-    symbol = data.get("symbol", "").upper()
+    symbol = data["symbol"].upper()
 
     if symbol == "BTCUSDT":
         return evaluate_btc_strategy(data)
-    
-    return f"⚠️ 尚未支援的幣種：{symbol}", 0
+    elif symbol == "XAUUSD":
+        return evaluate_xau_strategy(data)
+    else:
+        return (f"⚠️ 不支援的交易對：{symbol}", 0)
