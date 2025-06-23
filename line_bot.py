@@ -1,13 +1,21 @@
 import requests
-from config import LINE_CHANNEL_ACCESS_TOKEN
+import os
+
+CHANNEL_ACCESS_TOKEN = os.environ.get("CHANNEL_ACCESS_TOKEN")
+LINE_USER_ID = os.environ.get("LINE_USER_ID")
 
 def send_line_message(message: str):
-    url = "https://notify-api.line.me/api/notify"
+    url = "https://api.line.me/v2/bot/message/push"
     headers = {
-        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {CHANNEL_ACCESS_TOKEN}"
     }
     payload = {
-        "message": message
+        "to": LINE_USER_ID,
+        "messages": [{
+            "type": "text",
+            "text": message
+        }]
     }
-    response = requests.post(url, headers=headers, data=payload)
-    return response.status_code
+    response = requests.post(url, headers=headers, json=payload)
+    return response.status_code, response.text
