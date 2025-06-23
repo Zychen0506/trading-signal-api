@@ -1,12 +1,11 @@
 import requests
-from config import LINE_NOTIFY_TOKEN
+from config import LINE_CHANNEL_ACCESS_TOKEN
 
 def send_line_message(message: str):
     url = "https://notify-api.line.me/api/notify"
     headers = {
-        "Authorization": f"Bearer {LINE_NOTIFY_TOKEN}"
+        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
     }
-
     payload = {
         "message": message
     }
