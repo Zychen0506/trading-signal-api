@@ -40,7 +40,6 @@ async def webhook(data: SignalData):
         user_id = os.environ.get("LINE_USER_ID")
         status, resp_text = send_line_message(user_id, message)
         print(f"LINE status: {status}, response: {resp_text}")
-        
     append_trade_to_sheet(signal_data, confidence, score_detail)
     
 
