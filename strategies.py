@@ -1,3 +1,5 @@
+# === strategies.py ===
+
 from typing import Tuple, Dict, Any
 
 # 策略基底類別
@@ -15,19 +17,21 @@ class BTCStrategy(BaseStrategy):
         kd = data.get("kd", 0)
         bollinger = data.get("bollinger", 0)
         ma = data.get("ma", 0)
+        fib = data.get("fib", 0)
 
         message = f"🚀 BTCUSDT 比特幣訊號\n"
         message += f"📊 信心指數：{confidence} 分\n"
         message += f"RSI：{rsi} 分\nMACD：{macd} 分\nKD：{kd} 分\n"
-        message += f"Bollinger：{bollinger} 分\nMA：{ma} 分\n"
-        message += f"價格：{price}"
+        message += f"Bollinger：{bollinger} 分\nMA：{ma} 分\nFibonacci：{fib} 分\n"
+        message += f"🎯 價格：{price}"
 
         score_detail = {
             "rsi": rsi,
             "macd": macd,
             "kd": kd,
             "bollinger": bollinger,
-            "ma": ma
+            "ma": ma,
+            "fib": fib
         }
 
         return message, confidence, score_detail
@@ -42,19 +46,21 @@ class XAUStrategy(BaseStrategy):
         kd = data.get("kd", 0)
         bollinger = data.get("bollinger", 0)
         ma = data.get("ma", 0)
+        fib = data.get("fib", 0)
 
         message = f"🪙 XAUUSD 黃金訊號\n"
         message += f"📊 信心指數：{confidence} 分\n"
         message += f"RSI：{rsi} 分\nMACD：{macd} 分\nKD：{kd} 分\n"
-        message += f"Bollinger：{bollinger} 分\nMA：{ma} 分\n"
-        message += f"價格：{price}"
+        message += f"Bollinger：{bollinger} 分\nMA：{ma} 分\nFibonacci：{fib} 分\n"
+        message += f"🎯 價格：{price}"
 
         score_detail = {
             "rsi": rsi,
             "macd": macd,
             "kd": kd,
             "bollinger": bollinger,
-            "ma": ma
+            "ma": ma,
+            "fib": fib
         }
 
         return message, confidence, score_detail
