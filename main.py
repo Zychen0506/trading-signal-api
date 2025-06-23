@@ -20,7 +20,7 @@ class SignalData(BaseModel):
     kd: Optional[int] = 0
     bollinger: Optional[int] = 0
     ma: Optional[int] = 0
-    fib: Optional[int] = 0  # 有些策略可能包含斐波納契，保留欄位
+    fib: Optional[int] = 0
 
 @app.get("/")
 def read_root():
@@ -30,14 +30,18 @@ def read_root():
 async def webhook(data: SignalData):
     signal_data = data.dict()
 
-    # 根據 symbol 分派策略 + 回傳 LINE 訊息 + 分數
-    message, confidence = dispatch_strategy(signal_data)
+    # 分派策略與計算
+    message, confidence, score_detail = dispatch_strategy(signal_data)
 
-    # 若信心分數達門檻則推送 LINE
+    # 發送通知
     if confidence >= 80:
         send_line_message(message)
 
-    # 儲存訊號與分析
+    # 紀錄訊號
     log_signal(signal_data, confidence)
 
-    return {"status": "received", "confidence": confidence}
+    return {
+        "status": "received",
+        "confidence": confidence,
+        "details": score_detail
+    }
