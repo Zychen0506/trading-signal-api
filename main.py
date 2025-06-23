@@ -33,11 +33,12 @@ async def webhook(data: SignalData):
     # 分派策略與計算
     message, confidence, score_detail = dispatch_strategy(signal_data)
 
-    # 發送通知
+    # 發送通知（使用 LINE Messaging API）
     if confidence >= 80:
-        send_line_message(message)
+        status, resp_text = send_line_message(message)
+        print(f"LINE status: {status}, response: {resp_text}")  # 可以協助 debug
 
-    # 紀錄訊號
+    # 記錄訊號
     log_signal(signal_data, confidence)
 
     return {
