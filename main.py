@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from strategy_dispatcher import dispatch_strategy
 from line_bot import send_line_message
 from signal_logger import log_signal
-from record_trade import record_trade
 from typing import Optional
+from google_sheet_logger import append_trade_to_sheet
 
 app = FastAPI()
 
@@ -41,9 +41,8 @@ async def webhook(data: SignalData):
         status, resp_text = send_line_message(user_id, message)
         print(f"LINE status: {status}, response: {resp_text}")
 
-    # 記錄訊號至 log 與 trade.csv
-    log_signal(signal_data, confidence)
     record_trade(signal_data, confidence, score_detail)
+    append_trade_to_sheet(signal_data, confidence, score_detail)
 
     return {
         "status": "received",
