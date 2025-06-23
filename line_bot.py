@@ -1,14 +1,13 @@
 import requests
-from config import LINE_CHANNEL_ACCESS_TOKEN, LINE_USER_ID
+from config import LINE_NOTIFY_TOKEN
 
-def send_line_message(message):
-    url = "https://api.line.me/v2/bot/message/push"
+def send_line_message(message: str):
+    url = "https://notify-api.line.me/api/notify"
     headers = {
-        "Authorization": f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}",
-        "Content-Type": "application/json"
+        "Authorization": f"Bearer {LINE_NOTIFY_TOKEN}"
     }
-    data = {
-        "to": LINE_USER_ID,
-        "messages": [{"type": "text", "text": message}]
+    payload = {
+        "message": message
     }
-    requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, data=payload)
+    return response.status_code
