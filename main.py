@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from strategy_dispatcher import dispatch_strategy
 from line_bot import send_line_message
 from signal_logger import log_signal
+from record_trade import record_trade
 from typing import Optional
 
 app = FastAPI()
@@ -31,16 +32,18 @@ def read_root():
 async def webhook(data: SignalData):
     signal_data = data.dict()
 
-    # 分派策略與計算
+    # 分派策略並取得推播內容與分數
     message, confidence, score_detail = dispatch_strategy(signal_data)
 
-    # 發送通知（使用 LINE Messaging API）
+    # 若信心足夠，發送 LINE 推播
     if confidence >= 80:
-        status, resp_text = send_line_message(os.environ.get("LINE_USER_ID"), message)
+        user_id = os.environ.get("LINE_USER_ID")
+        status, resp_text = send_line_message(user_id, message)
         print(f"LINE status: {status}, response: {resp_text}")
 
-    # 記錄訊號
+    # 記錄訊號至 log 與 trade.csv
     log_signal(signal_data, confidence)
+    record_trade(signal_data, confidence, score_detail)
 
     return {
         "status": "received",
