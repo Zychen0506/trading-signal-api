@@ -73,15 +73,23 @@ class BTCStrategy(BaseStrategy):
         bollinger = data.get("bollinger", 0)
         ma = data.get("ma", 0)
         fib = data.get("fib", 0)
-        leverage = data.get("leverage", 0)
+        leverage = data.get("leverage", 10)
+        side = data.get("side", "").lower()
 
-        rr_ratio = format_rr(takeprofit, stoploss)
+        rr_ratio = format_rr(price, stoploss, takeprofit)
+        direction = "做多 🟢" if side == "buy" else "做空 🔴"
 
-        message = f"\n🟠 BTCUSDT 比特幣訊號\n"
-        message += f"📊 信心指數：{confidence} 分（RR：{rr_ratio}）\n"
-        message += f"🔹 RSI：{rsi} 分\n🔹 MACD：{macd} 分\n🔹 KD：{kd} 分\n"
-        message += f"🔹 MA：{ma} 分\n🔹 Bollinger：{bollinger} 分\n🔹 Fibonacci：{fib} 分\n"
-        message += f"💰 現價：{price}\n🛡️ 止損：{stoploss}\n🎯 止盈：{takeprofit}\n⚖️ 槓桿建議：{leverage} 倍"
+        message = f"""🟠 BTCUSDT 比特幣訊號
+📊 信心指數：{confidence} 分（RR：{rr_ratio}）
+🔹 RSI：{rsi} 分 | MACD：{macd} 分 | KD：{kd} 分
+🔹 MA：{ma} 分 | Bollinger：{bollinger} 分 | Fibonacci：{fib} 分
+
+📌 方向：{direction}
+💰 現價：{price}
+🛡️ 止損：{stoploss}
+🎯 止盈：{takeprofit}
+⚖️ 槓桿建議：{leverage} 倍
+"""
 
         score_detail = {
             "rsi": rsi,
@@ -93,10 +101,12 @@ class BTCStrategy(BaseStrategy):
             "stoploss": stoploss,
             "takeprofit": takeprofit,
             "leverage": leverage,
-            "rr_ratio": rr_ratio
+            "rr_ratio": rr_ratio,
+            "side": side
         }
 
         return message, confidence, score_detail
+
 
 
 STRATEGY_MAP = {
