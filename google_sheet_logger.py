@@ -8,7 +8,7 @@ def append_trade_to_sheet(data, confidence, score_detail):
         creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
         client = gspread.authorize(creds)
 
-        sheet = client.open("Trading Records").sheet1  # 名稱請對應你的 Google Sheet
+        sheet = client.open("Trading Records").Trading Records 
 
         row = [
             datetime.now().isoformat(),
