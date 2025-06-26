@@ -11,6 +11,7 @@ def append_trade_to_sheet(data, confidence, score_detail, signal_type="正式"):
         sheet = client.open("Trading Records").sheet1 
 
         row = [
+            data.get("id", "-"),
             datetime.now().isoformat(),
             data["symbol"],
             data["side"],
