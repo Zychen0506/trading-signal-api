@@ -11,6 +11,7 @@ import json
 app = FastAPI()
 
 class SignalData(BaseModel):
+    id: Optional[str] = None
     symbol: str
     side: str
     price: float
