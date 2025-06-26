@@ -2,7 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
-def append_trade_to_sheet(data, confidence, score_detail):
+def append_trade_to_sheet(data, confidence, score_detail, signal_type="正式"):
     try:
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
         creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
@@ -26,6 +26,7 @@ def append_trade_to_sheet(data, confidence, score_detail):
             score_detail.get("bollinger", 0),
             score_detail.get("ma", 0),
             score_detail.get("fib", 0),
+            signal_type
         ]
 
         sheet.append_row(row, value_input_option="USER_ENTERED")
