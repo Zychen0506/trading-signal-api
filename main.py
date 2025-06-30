@@ -36,8 +36,6 @@ async def webhook(request: Request):
     raw_text = body.decode("utf-8")
 
     signal_type = "正式"
-    
-    # 預信號處理
     if raw_text.startswith("【預信號】"):
         signal_type = "預信號"
         raw_text = raw_text.replace("【預信號】", "")
@@ -48,16 +46,19 @@ async def webhook(request: Request):
     except Exception as e:
         return {"status": "error", "message": f"格式錯誤：{e}"}
 
-    # 分派策略並取得推播內容與分數細節
     message, confidence, score_detail = dispatch_strategy(signal_data.dict())
 
-    # 發送 LINE 推播（只有正式信號才送）
+    # === 根據多空分開處理 LINE / 推播
     if signal_type == "正式" and confidence >= 80:
         user_id = os.environ.get("LINE_USER_ID")
-        status, resp_text = send_line_message(user_id, message)
+        if signal_data.side == "buy":
+            status, resp_text = send_line_message(user_id, f"[多單] {message}")
+        elif signal_data.side == "sell":
+            status, resp_text = send_line_message(user_id, f"[空單] {message}")
+        else:
+            status, resp_text = send_line_message(user_id, f"[未知] {message}")
         print(f"LINE status: {status}, response: {resp_text}")
 
-    # 寫入 Google Sheet（含 signal_type）
     append_trade_to_sheet(signal_data.dict(), confidence, score_detail, signal_type)
 
     return {
